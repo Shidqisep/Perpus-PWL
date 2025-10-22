@@ -18,3 +18,4 @@
             <a class="navbar-link <?= ($currentPage == 'peminjaman') ? ' active' : '' ?>" href="<?= BASEURL ?>/peminjaman">Daftar Peminjaman</a>
              <a class="navbar-link <?= ($currentPage == 'anggota') ? ' active' : '' ?>" href="<?= BASEURL ?>/anggota">Daftar Anggota</a>
     </navbar>
+    

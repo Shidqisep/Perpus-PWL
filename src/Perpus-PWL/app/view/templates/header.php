@@ -10,6 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Halaman <?= $data['judul'] ?></title>
     <link rel="stylesheet" href= "<?= BASEURL ?>/css/styles.css">
+    <link rel="icon" type="image/x-icon" href="<?= BASEURL ?>/asset/favicon.png">
 </head>
 <body>
     <navbar class="navbar">

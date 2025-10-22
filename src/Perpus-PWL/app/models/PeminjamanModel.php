@@ -28,7 +28,8 @@ class PeminjamanModel{
 
     public function updateStatus($id_peminjaman){
         $query = "UPDATE $this->table SET 
-        status = 'Dikembalikan'
+        status = 'Dikembalikan', 
+        tanggal_kembali = NOW() 
         WHERE id_peminjaman = :id_peminjaman";
         $this->db->query($query);
         $this->db->bind('id_peminjaman', $id_peminjaman);
@@ -73,9 +74,9 @@ class PeminjamanModel{
 
     public function countDenda($id_peminjaman){
         $this->db->query("SELECT 
-        DATEDIFF(CURDATE(), tanggal_kembali) AS terlambat
+        DATEDIFF(tanggal_kembali, tanggal_pinjam) AS terlambat
         FROM $this->table
-        WHERE id_peminjaman = :id_peminjaman AND status = 'Dipinjam'");
+        WHERE id_peminjaman = :id_peminjaman AND status = 'Dikembalikan'");
         $this->db->bind('id_peminjaman', $id_peminjaman);
         $result = $this->db->singleSet();
         if($result && ($result['terlambat'] > 7)){ //jika tanggal pemgembalian lebih dari 7 hari

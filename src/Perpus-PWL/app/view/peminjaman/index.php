@@ -27,7 +27,7 @@
         <td><?= $peminjaman["tanggal_kembali"]?></td>
         <td><?= $peminjaman["status"]?></td>
         <td><?= $data['denda'][$peminjaman['id_peminjaman']] ?></td>
-        <td >
+        <td>
         <div class="action-btn">
         <a class="ubah-btn" href="<?= BASEURL ?>/peminjaman/ubahStatus/<?= $peminjaman['id_peminjaman']?>/<?= $peminjaman['id_buku']?>">Ubah Status </a>
         <a class="delete-btn" href="<?= BASEURL ?>/peminjaman/hapus/<?= $peminjaman['id_peminjaman'] ?>" onclick="return confirm('Apakah anda yakin?')">Hapus</a>

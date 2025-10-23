@@ -1,12 +1,23 @@
-
 <?php Flasher::flash(); ?>
 
 <a class="add-btn" id="addBuku" href="<?= BASEURL ?>/buku/tambah">Tambah buku</a>
 
-<form action=" <?= BASEURL ?>/buku/cari" method="post" class="form-cari">
-<input class="searchBar"  type="text" name="keyword" id="keyword" autocomplete="off">
-<button class="navbar-link" type="submit">Cari</button>
+<form action="<?= BASEURL ?>/buku/index" method="get" class="form-cari">
+    <input class="searchBar" type="text" name="keyword" id="keyword" autocomplete="off" value="<?= htmlspecialchars($data['keyword'] ?? '') ?>">
+    <button class="navbar-link" type="submit">Cari</button>
 </form>
+
+<div class="pagination">
+    <?php $kw = isset($data['keyword']) && $data['keyword'] !== '' ? '?keyword=' . urlencode($data['keyword']) : ''; ?>
+    <?php if ($data['jumlah_halaman'] > 1): ?>
+        <a class="page-number <?= ($data['halaman_sekarang'] == 1) ? 'disabled' : '' ?>" href="<?= BASEURL ?>/buku/index/<?= $data['halaman_sekarang'] - 1 ?><?= $kw ?>"><</a>
+        <?php endif; ?>
+    <?php for ($i = 1; $i <= $data['jumlah_halaman']; $i++) : ?>
+        <a class="page-number <?= $data['halaman_sekarang'] == $i ? 'active' : '' ?>" href="<?= BASEURL ?>/buku/index/<?= $i ?><?= $kw ?>"><?= $i ?></a>
+    <?php endfor; ?>
+    <a class="page-number <?= ($data['halaman_sekarang'] == $data['jumlah_halaman']) ? 'disabled' : '' ?>" href="<?= BASEURL ?>/buku/index/<?= $data['halaman_sekarang'] + 1 ?><?= $kw ?>">></a>
+</div>
+
 <div class="table-buku">
     <table>
     <tr>

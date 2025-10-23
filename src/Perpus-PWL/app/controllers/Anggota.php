@@ -2,12 +2,29 @@
 
 class Anggota extends Controller{
 
-    public function index(){
-         $data['judul'] = "Daftar Anggota";
-        $data['anggota'] = $this->model('AnggotaModel')->getAllAnggota();
-        $this->view('templates/header', $data);
-        $this->view('anggota/index', $data);
-        $this->view('templates/footer');
+    // public function index(){
+    //      $data['judul'] = "Daftar Anggota";
+    //     $data['anggota'] = $this->model('AnggotaModel')->getAllAnggota();
+    //     $this->view('templates/header', $data);
+    //     $this->view('anggota/index', $data);
+    //     $this->view('templates/footer');
+    // }
+
+    public function index($halaman = 1){
+    $data['judul'] = "Anggota";
+    $keyword = isset($_GET['keyword']) ? trim($_GET['keyword']) : '';
+    $limit = 5;
+    $offset = ($halaman - 1) * $limit;
+
+    $total = $this->model('AnggotaModel')->countAllAnggotaWithKeyword($keyword);
+    $data['halaman_sekarang'] = $halaman;
+    $data['jumlah_halaman'] = ($total > 0) ? ceil($total / $limit) : 1;
+    $data['anggota'] = $this->model('AnggotaModel')->getAnggotaByPage($limit, $offset, $keyword);
+    $data['keyword'] = $keyword;
+
+    $this->view('templates/header', $data);
+    $this->view('anggota/index', $data);
+    $this->view('templates/footer');
     }
 
     public function tambah(){

@@ -427,6 +427,65 @@ a{
       background: #0b5ed7;
     }
 
+.pagination{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin: 20px 0;
+} 
+
+.pagination {
+    display: flex;           /* Mengatur item (link) dalam satu baris */
+    justify-content: center; /* Menengahkan semua item */
+    align-items: center;     /* Menjaga item tetap sejajar di tengah (vertikal) */
+    gap: 8px;                /* Memberi jarak 8px antar setiap item */
+    margin-top: 24px;        /* Memberi jarak atas dari konten di atasnya */
+}
+
+.pagination .page-number {
+    display: inline-block;
+    padding: 10px 15px;      /* Ukuran "tombol" (10px atas/bawah, 15px kiri/kanan) */
+    min-width: 40px;         /* Lebar minimum agar tombol angka 1 terlihat pas */
+    text-align: center;
+    
+    background-color: #ffffff; /* Latar belakang putih */
+    color: #007bff;          /* Warna teks biru (warna primer) */
+    border: 1px solid #dee2e6; /* Border abu-abu muda */
+    border-radius: 4px;      /* Sudut sedikit melengkung */
+    
+    text-decoration: none;   
+    font-weight: 500;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.pagination .page-number:hover {
+    background-color: #f4f4f4; /* Latar belakang sedikit abu-abu */
+    color: #0056b3;          /* Warna teks biru lebih gelap */
+    border-color: #adb5bd;
+}
+
+.pagination .page-number.active {
+    background-color: #007bff; /* Latar belakang biru */
+    color: #ffffff;          /* Teks putih */
+    border-color: #007bff;     /* Border biru */
+    cursor: default;         /* Menandakan tidak bisa diklik */
+}
+
+/* Style untuk tombol yang non-aktif (opsional) */
+/* (Misal: tombol "<" di halaman 1) */
+.pagination .page-number.disabled {
+    background-color: #e9ecef; /* Latar belakang abu-abu pudar */
+    color: #6c757d;          /* Teks abu-abu pudar */
+    pointer-events: none;      /* Link tidak bisa diklik */
+}
+
+.pagination .page-number.active:hover {
+    background-color: #007bff; /* Tetap biru saat di-hover */
+    color: #ffffff;          /* Tetap putih */
+    border-color: #007bff;     /* Tetap biru */
+    cursor: default;         /* Menandakan tidak bisa diklik */
+}
 
 footer{
     bottom: 0;

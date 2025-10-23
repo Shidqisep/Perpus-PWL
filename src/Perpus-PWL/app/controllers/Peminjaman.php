@@ -2,16 +2,36 @@
 
 class Peminjaman extends Controller {
 
-    public function index(){
-        $data['judul'] = "Peminjaman";
-        $data['peminjaman'] = $this->model('PeminjamanModel')->getJoinedPeminjaman();
-        // Hitung denda untuk setiap peminjaman
-        foreach ($data['peminjaman'] as $peminjaman) {
+    // public function index(){
+    //     $data['judul'] = "Peminjaman";
+    //     $data['peminjaman'] = $this->model('PeminjamanModel')->getJoinedPeminjaman();
+    //     // Hitung denda untuk setiap peminjaman
+    //     foreach ($data['peminjaman'] as $peminjaman) {
+    //         $data['denda'][$peminjaman['id_peminjaman']] = $this->model('PeminjamanModel')->countDenda($peminjaman['id_peminjaman']);
+    //     }
+    //     $this->view('templates/header', $data);
+    //     $this->view('peminjaman/index', $data);
+    //     $this->view('templates/footer', $data);
+    // }
+
+    public function index($halaman = 1){
+    $data['judul'] = "Peminjaman";
+    $keyword = isset($_GET['keyword']) ? trim($_GET['keyword']) : '';
+    $limit = 5;
+    $offset = ($halaman - 1) * $limit;
+
+    $total = $this->model('PeminjamanModel')->countAllPeminjamanWithKeyword($keyword);
+    $data['halaman_sekarang'] = $halaman;
+    $data['jumlah_halaman'] = ($total > 0) ? ceil($total / $limit) : 1;
+    $data['peminjaman'] = $this->model('PeminjamanModel')->getPeminjamanByPage($limit, $offset, $keyword);
+    $data['keyword'] = $keyword;
+    foreach ($data['peminjaman'] as $peminjaman) {
             $data['denda'][$peminjaman['id_peminjaman']] = $this->model('PeminjamanModel')->countDenda($peminjaman['id_peminjaman']);
         }
-        $this->view('templates/header', $data);
-        $this->view('peminjaman/index', $data);
-        $this->view('templates/footer', $data);
+
+    $this->view('templates/header', $data);
+    $this->view('peminjaman/index', $data);
+    $this->view('templates/footer');
     }
 
     public function tambah(){

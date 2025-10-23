@@ -2,12 +2,31 @@
 
 class Buku extends Controller{
 
-    public function index(){
-        $data['judul'] = "Buku";
-        $data['buku'] = $this->model('BukuModel')->getAllBuku();
-        $this->view('templates/header', $data);
-        $this->view('buku/index', $data);
-        $this->view('templates/footer');
+    // public function index($halaman = 1){
+    //     $totalBuku = $this->model('BukuModel')->countAllBuku();
+    //     $data['judul'] = "Buku";
+    //     $data['buku'] = $this->model('BukuModel')->getBukuByPage(5, ($halaman - 1) * 5);
+    //     $data['jumlah_halaman'] = ceil($totalBuku / 5);
+    //     $this->view('templates/header', $data);
+    //     $this->view('buku/index', $data);
+    //     $this->view('templates/footer');
+    // }
+
+    public function index($halaman = 1){
+    $data['judul'] = "Buku";
+    $keyword = isset($_GET['keyword']) ? trim($_GET['keyword']) : '';
+    $limit = 5;
+    $offset = ($halaman - 1) * $limit;
+
+    $total = $this->model('BukuModel')->countAllBukuWithKeyword($keyword);
+    $data['halaman_sekarang'] = $halaman;
+    $data['jumlah_halaman'] = ($total > 0) ? ceil($total / $limit) : 1;
+    $data['buku'] = $this->model('BukuModel')->getBukuByPage($limit, $offset, $keyword);
+    $data['keyword'] = $keyword;
+
+    $this->view('templates/header', $data);
+    $this->view('buku/index', $data);
+    $this->view('templates/footer');
     }
 
     public function tambah(){
@@ -95,6 +114,18 @@ class Buku extends Controller{
         $this->view('templates/footer');
     }
 
+    // public function pagination($page = 1){
+    //     $data['judul'] = "Buku";
+    //     $limit = 5;
+    //     $offset = ($page - 1) * $limit;
+    //     $data['buku'] = $this->model('BukuModel')->getBukuByPage($limit, $offset);
+    //     $totalBuku = $this->model('BukuModel')->countAllBuku();
+    //     $data['jumlah_halaman'] = ceil($totalBuku / $limit);
+    //     $this->view('templates/header', $data);
+    //     $this->view('buku/index', $data);
+    //     $this->view('templates/footer');
+    // }
+
     public function cari(){
         if( isset($_POST['keyword']) ) {
             $data['judul'] = "Buku";
@@ -110,4 +141,6 @@ class Buku extends Controller{
         $this->view('templates/footer');
         }
     }
+
+
 }

@@ -65,4 +65,24 @@ class AnggotaModel{
         $this->db->execute();
         return $this->db->rowCount();
     }
+
+    public function countAllAnggotaWithKeyword($keyword = null){
+        $this->db->query("SELECT COUNT(*) as total FROM $this->table WHERE status_anggota = 'aktif' AND (nama LIKE :keyword OR alamat LIKE :keyword OR no_hp LIKE :keyword)");
+        $this->db->bind('keyword', "%$keyword%");
+        $result = $this->db->singleSet();
+        return $result['total'];
+    }
+
+    public function getAnggotaByPage($limit, $offset, $keyword = null){
+        if($keyword){
+            $this->db->query("SELECT * FROM $this->table WHERE status_anggota = 'aktif' AND (nama LIKE :keyword OR alamat LIKE :keyword OR no_hp LIKE :keyword) LIMIT :limit OFFSET :offset");
+            $this->db->bind('keyword', "%$keyword%");
+        }else {
+            $this->db->query("SELECT * FROM $this->table WHERE status_anggota = 'aktif' LIMIT :limit OFFSET :offset");
+        }
+        $this->db->bind('limit', $limit);
+        $this->db->bind('offset', $offset);
+        $this->db->execute();
+        return $this->db->resultSet();
+    }
 }

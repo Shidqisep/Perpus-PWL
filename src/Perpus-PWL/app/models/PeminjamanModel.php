@@ -94,4 +94,59 @@ class PeminjamanModel{
         return $result['count'];
     }
 
+    public function countAllPeminjaman(){
+        $this->db->query("SELECT COUNT(*) as total FROM $this->table");
+        $result = $this->db->singleSet();
+        return $result['total'];
+    }
+
+    public function countAllPeminjamanWithKeyword($keyword){
+        $this->db->query("SELECT COUNT(*) as total
+        FROM peminjaman
+        JOIN anggota ON peminjaman.id_anggota = anggota.id_anggota
+        JOIN buku ON peminjaman.id_buku = buku.id_buku
+        WHERE anggota.nama LIKE :keyword OR buku.judul LIKE :keyword");
+        $this->db->bind('keyword', "%$keyword%");
+        $result = $this->db->singleSet();
+        return $result['total'];
+    }
+
+    public function getPeminjamanByPage($limit, $offset, $keyword = null){
+        if($keyword){
+            $this->db->query("SELECT
+            peminjaman.id_peminjaman,
+            peminjaman.id_buku, 
+            anggota.nama AS nama_peminjam,
+            buku.judul AS judul_buku,
+            peminjaman.tanggal_pinjam,
+            peminjaman.tanggal_kembali,
+            peminjaman.status
+            FROM peminjaman
+            JOIN anggota ON peminjaman.id_anggota = anggota.id_anggota
+            JOIN buku ON peminjaman.id_buku = buku.id_buku
+            WHERE anggota.nama LIKE :keyword OR buku.judul LIKE :keyword
+            ORDER BY peminjaman.tanggal_pinjam ASC
+            LIMIT :limit OFFSET :offset");
+            $this->db->bind('keyword', "%$keyword%");
+        }else {
+            $this->db->query("SELECT
+            peminjaman.id_peminjaman,
+            peminjaman.id_buku, 
+            anggota.nama AS nama_peminjam,
+            buku.judul AS judul_buku,
+            peminjaman.tanggal_pinjam,
+            peminjaman.tanggal_kembali,
+            peminjaman.status
+            FROM peminjaman
+            JOIN anggota ON peminjaman.id_anggota = anggota.id_anggota
+            JOIN buku ON peminjaman.id_buku = buku.id_buku
+            ORDER BY peminjaman.tanggal_pinjam ASC
+            LIMIT :limit OFFSET :offset");
+        }
+        $this->db->bind('limit', $limit);
+        $this->db->bind('offset', $offset);
+        $this->db->execute();
+        return $this->db->resultSet();
+    }
+
 }

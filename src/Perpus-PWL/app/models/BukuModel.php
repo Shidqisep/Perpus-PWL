@@ -136,6 +136,12 @@ class BukuModel{
         return $this->db->rowCount();
     }
 
+    public function countAllBuku(){
+        $this->db->query("SELECT COUNT(*) as total FROM $this->table WHERE status_buku = 'ada'");
+        $result = $this->db->singleSet();
+        return $result['total'];
+    }
+
     public function cariBuku(){
         $keyword = $_POST['keyword'];
         $query = "SELECT * FROM $this->table WHERE 
@@ -156,6 +162,40 @@ class BukuModel{
         return $this->db->singleSet()['jumlah_stok'];
     }
 
+    public function getBukuByPage($limit, $offset, $keyword = null){
+        $limit = (int)$limit;
+        $offset = (int)$offset;
+        if ($keyword) {
+            $query = "SELECT * FROM $this->table WHERE status_buku = 'ada' AND 
+            (judul LIKE :keyword OR
+            penulis LIKE :keyword OR
+            penerbit LIKE :keyword OR
+            tahun_terbit LIKE :keyword OR
+            kategori LIKE :keyword OR
+            jumlah_stok LIKE :keyword)
+            LIMIT :limit OFFSET :offset";
+            $this->db->query($query);
+            $this->db->bind('keyword', "%$keyword%");
+        } else {
+            $query = "SELECT * FROM $this->table WHERE status_buku = 'ada' LIMIT :limit OFFSET :offset";
+            $this->db->query($query);
+        }
+        $this->db->bind('limit', $limit);
+        $this->db->bind('offset', $offset);
+        return $this->db->resultSet();
+    }
 
-    
+    public function countAllBukuWithKeyword($keyword){
+        $this->db->query("SELECT COUNT(*) as total FROM $this->table WHERE status_buku = 'ada' AND 
+        (judul LIKE :keyword OR
+        penulis LIKE :keyword OR
+        penerbit LIKE :keyword OR
+        tahun_terbit LIKE :keyword OR
+        kategori LIKE :keyword OR
+        jumlah_stok LIKE :keyword)");
+        $this->db->bind('keyword', "%$keyword%");
+        $result = $this->db->singleSet();
+        return $result['total'];
+    }
+
 }
